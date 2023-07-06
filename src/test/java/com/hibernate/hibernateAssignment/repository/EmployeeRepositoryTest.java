@@ -1,6 +1,7 @@
 package com.hibernate.hibernateAssignment.repository;
 
 import com.hibernate.hibernateAssignment.HibernateAssignmentApplication;
+import com.hibernate.hibernateAssignment.entity.Address;
 import com.hibernate.hibernateAssignment.entity.Employee;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,10 @@ class EmployeeRepositoryTest {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     EmployeeRepository repository;
+    @Autowired
+    DepartmentRepository departmentRepository;
+    @Autowired
+    EmploymentTypeRepository employmentTypeRepository;
     @Test
     public void test10(){
         Employee employee = repository.findById(101).get();
@@ -38,5 +43,12 @@ class EmployeeRepositoryTest {
         Employee employee = repository.findById(101).get();
         logger.info("Testing city {}",employee.getAddress().getCity());
         assertEquals("Mumbai",employee.getAddress().getCity());
+    }
+    @Test
+    @Transactional
+    public void test14(){
+        Employee employee = new Employee(103,"Ben",new Address("Street 1","Pune","MH"),departmentRepository.findById(202).get(),employmentTypeRepository.findById(2).get());
+        repository.save(employee);
+        logger.info("Employee name {}",repository.findById(103).get().getEmpName());
     }
 }
